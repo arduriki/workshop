@@ -13,13 +13,14 @@ pub fn get_client_token(
     auth_url: &str,
     username: String,
     password: String,
-) -> Result<String, Box<dyn std::error::Error>> {
+) -> Result<String, reqwest::Error> {
     let client = Client::new();
     let response = client
         .post(auth_url)
         .basic_auth(username, Some(password))
         .send()?
+        .error_for_status()?
         .json::<HellaToken>()?;
 
-    return Ok(response.id_token);
+    Ok(response.id_token)
 }

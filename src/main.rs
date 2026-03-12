@@ -1,3 +1,4 @@
+use reqwest::StatusCode;
 use std::process::exit;
 
 mod client;
@@ -28,13 +29,24 @@ fn main() {
     let token = match client::get_client_token(auth_url, username, password) {
         Ok(t) => t,
         Err(e) => {
-            eprintln!("{}", e);
+            match e.status() {
+                Some(status) => match status {
+                    StatusCode::UNAUTHORIZED => eprintln!("Error: sin autorización"),
+                    StatusCode::TOO_MANY_REQUESTS => {
+                        eprintln!("Error: demasiadas peticiones al servidor")
+                    }
+                    _ => eprintln!("Error."),
+                },
+                None => eprintln!("Error de conexión"),
+            }
             exit(1);
         }
     };
 
     // Welcome to the user.
-    prompt::welcome();
+    println!("¡Bienvenid@ a la documentación de Hella! 🚗");
+    println!("Introduce un kType valido:");
+    
     // Prompt for the car's kType
     let ktype = prompt::prompt_ktype();
 
