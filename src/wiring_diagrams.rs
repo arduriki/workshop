@@ -77,4 +77,6 @@ pub fn select_wiring_diagram_system(gwdsr: Vec<WiringDiagramsResponse>) {
             println!("{0} - {1}", i + 1, group.text.as_ref().unwrap().title);
         }
     }
+    // TODO: Once the user selects a group, fetch system types.
+    // If system types depend on the car's year, then we need to ask the user for the year of the car.
 }
