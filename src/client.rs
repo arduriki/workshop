@@ -5,8 +5,7 @@ use serde::Deserialize;
 #[serde(rename_all = "camelCase")]
 struct HellaToken {
     id_token: String,
-    token_type: String,
-    expires_in: u32,
+    // expires_in: u32,
 }
 
 pub fn get_client_token(

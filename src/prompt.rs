@@ -8,4 +8,6 @@ pub fn prompt_ktype() -> String {
         .expect("Failed to read line");
 
     ktype.trim().to_string()
+    
+    // TODO: Make a for loop to make sure that it's a correct Ktype, otherwise prompt again.
 }

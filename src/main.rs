@@ -1,10 +1,15 @@
 use reqwest::StatusCode;
 use std::process::exit;
 
+use crate::wiring_diagrams::{WiringDiagramsResponse, get_wiring_diagram_systems_response};
+
 mod client;
 mod prompt;
+mod wiring_diagrams;
 
 fn main() {
+    const LANGUAGE: &str = "es";
+
     dotenv::dotenv().ok();
 
     let auth_url = "https://auth.macsds.hgs.cloud/api/v1/auth/token";
@@ -44,11 +49,21 @@ fn main() {
     };
 
     // Welcome to the user.
-    println!("¡Bienvenid@ a la documentación de Hella! 🚗");
+    println!("\n¡Bienvenid@ a la documentación de Hella! 🚗\n");
     println!("Introduce un kType valido:");
-    
+
     // Prompt for the car's kType
     let ktype = prompt::prompt_ktype();
 
-    todo!("Implement wiring diagram's endpoint.");
+    // Get Wiring Diagram Systems Response from its endpoint
+    let gwdsr = match get_wiring_diagram_systems_response(&token, &ktype, LANGUAGE) {
+        Ok(r) => r,
+        Err(e) => {
+            eprint!("{}", e);
+            exit(1);
+        }
+    };
+
+    // TODO: Select WD options
+    wiring_diagrams::select_wiring_diagram_system(gwdsr);
 }
